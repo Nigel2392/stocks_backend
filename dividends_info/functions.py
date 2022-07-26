@@ -30,8 +30,8 @@ def get_dividends_within_certain_years_ago(dividends, years_ago):
     return dividends_within_one_year_of_years_ago
 
 
-def get_dividend_rate_from_certain_years_ago(yahoo_obj, years_ago):
-    dividends = get_all_dividends(yahoo_obj)
+def get_dividend_rate_from_certain_years_ago(dividends, years_ago):
+    # dividends = get_all_dividends(yahoo_obj)
     dividends_within_one_year_of_years_ago = get_dividends_within_certain_years_ago(dividends, years_ago)
     yearly_dividend_rate = 0
     for dividend in dividends_within_one_year_of_years_ago:
@@ -51,7 +51,8 @@ def get_dividend_change_over_years(yahoo_obj, years):
     return increase
 
 
-def get_current_dividend_yield(yahoo_obj):
-    price = get_current_price(yahoo_obj)
-    rate = get_dividend_rate_from_certain_years_ago(yahoo_obj, 0)
+def get_current_dividend_yield(price, dividends):
+    """ this doesnt need any dates because current assumes were checking the rate over this past year"""
+    # price = get_current_price(yahoo_obj)
+    rate = get_dividend_rate_from_certain_years_ago(dividends, 0)
     return round((rate / price) * 100, 2)
