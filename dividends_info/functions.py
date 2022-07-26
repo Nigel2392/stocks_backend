@@ -15,7 +15,7 @@ def get_all_dividends(yahoo_obj):
     return dividends_dicts
 
 
-def get_dividends_within_certain_years_ago(dividends, years_ago):
+def get_dividends_within_one_year_of_years_ago(dividends, years_ago):
     """ takes a list of {'date': ..., 'amount':...}, NOT a yahoo obj"""
     today = datetime.date.today()
     days_ago = years_ago * 365
@@ -31,7 +31,7 @@ def get_dividends_within_certain_years_ago(dividends, years_ago):
 
 
 def get_dividend_rate_from_certain_years_ago(dividends, years_ago):
-    dividends_within_one_year_of_years_ago = get_dividends_within_certain_years_ago(dividends, years_ago)
+    dividends_within_one_year_of_years_ago = get_dividends_within_one_year_of_years_ago(dividends, years_ago)
     yearly_dividend_rate = 0
     for dividend in dividends_within_one_year_of_years_ago:
         print("date: {date}, amount: {amount}".format(date=dividend['date'], amount=dividend['amount']))
@@ -39,10 +39,10 @@ def get_dividend_rate_from_certain_years_ago(dividends, years_ago):
     return round(yearly_dividend_rate, 2)
 
 
-def get_dividend_change_over_years(yahoo_obj, years):
+def get_dividend_change_over_years(dividends, years):
     """to get the most recent rate just put years=0 in other words, started from today"""
-    recent_dividend_rate = get_dividend_rate_from_certain_years_ago(yahoo_obj, 0)
-    years_ago_dividend_rate = get_dividend_rate_from_certain_years_ago(yahoo_obj, years)
+    recent_dividend_rate = get_dividend_rate_from_certain_years_ago(dividends, 0)
+    years_ago_dividend_rate = get_dividend_rate_from_certain_years_ago(dividends, years)
     # print("recent dividend rate is %s" % recent_dividend_rate)
     # print("years_ago_dividend rate is %s" % years_ago_dividend_rate)
     increase = round(((recent_dividend_rate - years_ago_dividend_rate) / years_ago_dividend_rate * 100 / years), 1)

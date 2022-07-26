@@ -21,7 +21,8 @@ def index(request):
 
 def get_dividend_yield_change_for_certain_years_ago_view(request, ticker, years_ago):
     yahoo_stock_obj = yfinance.Ticker(ticker.upper())
-    change = get_dividend_change_over_years(yahoo_stock_obj, years_ago)
+    dividends = get_all_dividends(yahoo_stock_obj)
+    change = get_dividend_change_over_years(dividends, years_ago)
     change_object = {'change': change}
     data = json.dumps(change_object)
     return HttpResponse(data, content_type='application/json')
