@@ -15,6 +15,17 @@ def get_all_dividends(yahoo_obj):
     return dividends_dicts
 
 
+def get_all_dividends_dicts(yahoo_obj):
+    panda_dividends_obj = yahoo_obj.dividends
+    dividends_dicts = []
+    for i, v in panda_dividends_obj.iteritems():
+        dividends_dicts.append({'date': i.to_pydatetime().date(), 'amount': v})
+    final_dicts = []
+    for dict in dividends_dicts:
+        final_dicts.append({'date': dict['date'].strftime("%m/%d/%Y"), 'amount': dict['amount']})
+    print(final_dicts)
+
+
 def get_dividends_within_time_span(dividends, start_date, end_date):
     """change to take a time span of start, end, 2 dates and grab dividends within those dates"""
     # today = datetime.date.today()
@@ -59,5 +70,5 @@ def get_dividend_change_over_years(dividends, years):
 
 def get_current_dividend_yield(price, dividends):
     """ this doesnt need any dates because current assumes were checking the rate over this past year"""
-    rate = get_dividend_rate_from_certain_years_ago(dividends, 0)
+    rate = get_yearly_dividend_rate_from_date(dividends, datetime.date.today())
     return round((rate / price) * 100, 2)

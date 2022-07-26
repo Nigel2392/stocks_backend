@@ -9,6 +9,7 @@ from .functions import (
     get_current_price,
     get_dividend_change_over_years,
     get_current_dividend_yield,
+    get_all_dividends_dicts,
 )
 
 # HOW TO RETURN JSON
@@ -30,6 +31,7 @@ def get_dividend_yield_change_for_certain_years_ago_view(request, ticker, years_
 
 def current_dividend_yield_view(request, ticker):
     yahoo_stock_obj = yfinance.Ticker(ticker.upper())
+    get_all_dividends_dicts(yahoo_stock_obj)
     # print(get_all_dividends(yahoo_stock_obj))
     price = get_current_price(yahoo_stock_obj)
     dividends = get_all_dividends(yahoo_stock_obj)
