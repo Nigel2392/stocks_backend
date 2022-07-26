@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.core import serializers
 
-import json, yfinance
+import datetime, json, yfinance
 
 from .functions import (
     get_all_dividends,
@@ -23,7 +23,8 @@ def index(request):
 def get_dividend_yield_change_for_certain_years_ago_view(request, ticker, years_ago):
     yahoo_stock_obj = yfinance.Ticker(ticker.upper())
     dividends = get_all_dividends(yahoo_stock_obj)
-    change = get_dividend_change_over_years(dividends, years_ago)
+    today = datetime.date.today()
+    change = get_dividend_change_over_years(dividends, years_ago, today)
     change_object = {'change': change}
     data = json.dumps(change_object)
     return HttpResponse(data, content_type='application/json')
