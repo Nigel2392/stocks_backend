@@ -1,3 +1,7 @@
 from django.test import TestCase
 
-# Create your tests here.
+
+class DividendsFunctionsTests(TestCase):
+
+    def test_this(self):
+        self.assertIs(True, True)
