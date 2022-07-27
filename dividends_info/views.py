@@ -15,14 +15,17 @@ from .functions import (
 # HOW TO RETURN JSON
 # https://stackoverflow.com/questions/9262278/how-do-i-return-json-without-using-a-template-in-django
 
+def get_dividends(ticker):
+    yahoo_stock_obj = yfinance.Ticker(ticker.upper())
+    dividends = get_all_dividends(yahoo_stock_obj)
+    return dividends
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
 
 def get_dividend_yield_change_for_certain_years_ago_view(request, ticker, years_ago):
-    yahoo_stock_obj = yfinance.Ticker(ticker.upper())
-    dividends = get_all_dividends(yahoo_stock_obj)
+    dividends = get_dividends(ticker)
     today = datetime.date.today()
     change = get_dividend_change_over_years(dividends, years_ago, today)
     change_object = {'change': change}
@@ -31,12 +34,23 @@ def get_dividend_yield_change_for_certain_years_ago_view(request, ticker, years_
 
 
 def current_dividend_yield_view(request, ticker):
-    yahoo_stock_obj = yfinance.Ticker(ticker.upper())
-    get_all_dividends_dicts(yahoo_stock_obj)
+    # yahoo_stock_obj = yfinance.Ticker(ticker.upper())
+    # get_all_dividends_dicts(yahoo_stock_obj)
     # print(get_all_dividends(yahoo_stock_obj))
     price = get_current_price(yahoo_stock_obj)
-    dividends = get_all_dividends(yahoo_stock_obj)
+    # dividends = get_all_dividends(yahoo_stock_obj)
+    dividends = get_dividends(ticker)
     current_yield = get_current_dividend_yield(price, dividends)
     current_yield_object = {'current_yield': current_yield}
     data = json.dumps(current_yield_object)
+    return HttpResponse(data, content_type='application/json')
+
+
+def dividends_over_last_certain_years(request, ticker, years_back):
+    dividends = get_dividends(ticker)
+    today = datetime.date.today()
+    days_ago = years_back * 365
+    years_back_datetime = today - datetime.timedelta(days=days_ago)
+    dividends_over_certain_year_timespan = get_dividends_within_time_span(dividends, years_back_datetime, today)
+    data = json.dumps(dividends_over_certain_year_timespan)
     return HttpResponse(data, content_type='application/json')

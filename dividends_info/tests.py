@@ -7,6 +7,7 @@ from .data import DIVIDENDS_DATA_FOR_PSEC
 from .functions import (
     get_dividends_within_time_span,
     get_yearly_dividend_rate_from_date,
+    get_dividend_change_over_years,
 )
 
 def dividends_data_string_date_to_datetime(data):
@@ -47,7 +48,14 @@ class DividendsFunctionsTests(TestCase):
                     {'amount': 0.06, 'date': datetime.datetime(2019, 12, 31, 0, 0)}]
         self.assertEqual(actual_dividends, expected)
 
-
     def test_get_yearly_dividend_rate_from_date(self):
         actual_rate = get_yearly_dividend_rate_from_date(DIVIDENDS_DATA, datetime.datetime(2022, 7, 25))
         self.assertEqual(actual_rate, 0.78)
+
+    def test_get_dividend_change_over_years_1(self):
+        actual_change = get_dividend_change_over_years(DIVIDENDS_DATA, 10, datetime.datetime(2022, 7, 25))
+        self.assertEqual(actual_change, -3.6)
+
+    def test_get_dividend_change_over_years_2(self):
+        actual_change = get_dividend_change_over_years(DIVIDENDS_DATA, 3, datetime.datetime(2022, 7, 25))
+        self.assertEqual(actual_change, 2.8)

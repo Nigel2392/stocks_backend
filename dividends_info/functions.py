@@ -48,6 +48,7 @@ def get_yearly_dividend_rate_from_date(dividends, target_date):
     return round(yearly_dividend_rate, 2)
 
 
+# TESTED
 def get_dividend_change_over_years(dividends, years, end_date):
     recent_dividend_rate = get_yearly_dividend_rate_from_date(dividends, end_date)
     days_ago = years * 365
