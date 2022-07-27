@@ -10,6 +10,7 @@ from .functions import (
     get_dividend_change_over_years,
     get_current_dividend_yield,
     get_all_dividends_dicts,
+    get_dividends_within_time_span,
 )
 
 # HOW TO RETURN JSON
@@ -19,6 +20,14 @@ def get_dividends(ticker):
     yahoo_stock_obj = yfinance.Ticker(ticker.upper())
     dividends = get_all_dividends(yahoo_stock_obj)
     return dividends
+
+
+def dividends_datetime_to_string(data):
+    str_data = []
+    for dict in data:
+        str_data.append({'date': dict['date'].strftime("%m/%d/%Y"), 'amount': dict['amount']})
+    return str_data
+
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
@@ -49,5 +58,6 @@ def dividends_over_last_certain_years(request, ticker, years_back):
     days_ago = years_back * 365
     years_back_datetime = today - datetime.timedelta(days=days_ago)
     dividends_over_certain_year_timespan = get_dividends_within_time_span(dividends, years_back_datetime, today)
-    data = json.dumps(dividends_over_certain_year_timespan)
+    formatted_data = dividends_datetime_to_string(dividends_over_certain_year_timespan)
+    data = json.dumps(formatted_data)
     return HttpResponse(data, content_type='application/json')
