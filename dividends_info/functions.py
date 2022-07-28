@@ -3,7 +3,10 @@ import datetime
 
 def get_current_price(yahoo_obj):
     info = yahoo_obj.get_info()
-    price = info['currentPrice']
+    try:
+        price = info['currentPrice']
+    except KeyError:
+        price = info['navPrice']
     return price
 
 
@@ -55,6 +58,9 @@ def get_dividend_change_over_years(dividends, years, end_date):
     years_back_datetime = end_date - datetime.timedelta(days=days_ago)
     years_back_dividend_rate = get_yearly_dividend_rate_from_date(dividends, years_back_datetime)
 
+    if not years_back_dividend_rate:
+        return "there was no dividend back then"
+        
     print("recent dividend rate is %s" % recent_dividend_rate)
     print("years_back_dividend_rate rate is %s" % years_back_dividend_rate)
 

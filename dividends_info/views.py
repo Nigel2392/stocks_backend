@@ -44,6 +44,7 @@ def get_dividend_yield_change_for_certain_years_ago_view(request, ticker, years_
 
 def current_dividend_yield_view(request, ticker):
     yahoo_stock_obj = yfinance.Ticker(ticker.upper())
+    # import ipdb; ipdb.set_trace()
     price = get_current_price(yahoo_stock_obj)
     dividends = get_all_dividends(yahoo_stock_obj)
     current_yield = get_current_dividend_yield(price, dividends)
