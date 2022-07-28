@@ -11,6 +11,7 @@ from .functions import (
     get_current_dividend_yield,
     get_all_dividends_dicts,
     get_dividends_within_time_span,
+    get_yearly_dividend_rate_from_date,
 )
 
 # HOW TO RETURN JSON
@@ -70,4 +71,17 @@ def dividends_over_last_certain_years(request, ticker, years_back):
     dividends_over_certain_year_timespan = get_dividends_within_time_span(dividends, years_back_datetime, today)
     formatted_data = dividends_datetime_to_string(dividends_over_certain_year_timespan)
     data = json.dumps(formatted_data)
+    return HttpResponse(data, content_type='application/json')
+
+
+def recent_yearly_dividend_rate(request, ticker):
+    yahoo_stock_obj = yfinance.Ticker(ticker.upper())
+    dividends = get_all_dividends_dicts(yahoo_stock_obj)
+    print("dividends")
+    print(dividends)
+    # import ipdb; ipdb.set_trace()
+    today = datetime.date.today()
+    rate = get_yearly_dividend_rate_from_date(dividends, today)
+    rate_object = {'year_dividend_rate': rate}
+    data = json.dumps(rate_object)
     return HttpResponse(data, content_type='application/json')

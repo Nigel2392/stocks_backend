@@ -23,10 +23,11 @@ def get_all_dividends_dicts(yahoo_obj):
     dividends_dicts = []
     for i, v in panda_dividends_obj.iteritems():
         dividends_dicts.append({'date': i.to_pydatetime().date(), 'amount': v})
-    final_dicts = []
-    for dict in dividends_dicts:
-        final_dicts.append({'date': dict['date'].strftime("%m/%d/%Y"), 'amount': dict['amount']})
-    print(final_dicts)
+    # final_dicts = []
+    # for dict in dividends_dicts:
+    #     final_dicts.append({'date': dict['date'].strftime("%m/%d/%Y"), 'amount': dict['amount']})
+    # print(final_dicts)
+    return dividends_dicts
 
 
 # TESTED
@@ -60,7 +61,7 @@ def get_dividend_change_over_years(dividends, years, end_date):
 
     if not years_back_dividend_rate:
         return "there was no dividend back then"
-        
+
     print("recent dividend rate is %s" % recent_dividend_rate)
     print("years_back_dividend_rate rate is %s" % years_back_dividend_rate)
 
