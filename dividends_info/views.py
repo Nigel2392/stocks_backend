@@ -33,6 +33,15 @@ def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
 
 
+def current_price_view(request, ticker):
+    yahoo_stock_obj = yfinance.Ticker(ticker.upper())
+    current_price = get_current_price(yahoo_stock_obj)
+    current_price_object = {'current_price': current_price}
+    data = json.dumps(current_price_object)
+    return HttpResponse(data, content_type='application/json')
+
+
+
 def get_dividend_yield_change_for_certain_years_ago_view(request, ticker, years_ago):
     dividends = get_dividends(ticker)
     today = datetime.date.today()
