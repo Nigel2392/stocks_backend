@@ -1,2 +1,3 @@
 *.pyc
 dividends-env/*
+.env
