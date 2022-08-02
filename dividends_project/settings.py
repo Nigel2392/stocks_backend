@@ -29,6 +29,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'localhost',
     'stoqli.org',
     'https://octopus-app-8l8j5.ondigitalocean.app*',
     '*digitalocean.app*',
