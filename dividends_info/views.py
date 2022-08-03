@@ -46,6 +46,9 @@ def main_dividends_results(request, ticker):
         key = 'dividend_change_' + str(years_back) + '_year'
         dividends_data[key] = change
 
+    current_yield = get_current_dividend_yield(current_price, dividends)
+    dividends_data['current_yield'] = current_yield
+
     json_data = json.dumps(dividends_data)
     return HttpResponse(json_data, content_type='application/json')
 
@@ -59,13 +62,13 @@ def main_dividends_results(request, ticker):
 
 
 
-def get_dividend_yield_change_for_certain_years_ago_view(request, ticker, years_ago):
-    dividends = get_dividends(ticker)
-    today = datetime.date.today()
-    change = get_dividend_change_over_years(dividends, years_ago, today)
-    change_object = {'change': change}
-    data = json.dumps(change_object)
-    return HttpResponse(data, content_type='application/json')
+# def get_dividend_yield_change_for_certain_years_ago_view(request, ticker, years_ago):
+#     dividends = get_dividends(ticker)
+#     today = datetime.date.today()
+#     change = get_dividend_change_over_years(dividends, years_ago, today)
+#     change_object = {'change': change}
+#     data = json.dumps(change_object)
+#     return HttpResponse(data, content_type='application/json')
 
 
 def current_dividend_yield_view(request, ticker):
