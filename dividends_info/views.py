@@ -30,8 +30,14 @@ def dividends_datetime_to_string(data):
     return str_data
 
 
-def index(request):
-    dividends_data = []
+def main_dividends_results(request, ticker):
+    yahoo_stock_obj = yfinance.Ticker(ticker.upper())
+
+    current_price = get_current_price(yahoo_stock_obj)
+
+    dividends_data = {
+        'current_price': current_price,
+    }
     json_data = json.dumps(dividends_data)
     return HttpResponse(json_data, content_type='application/json')
 
