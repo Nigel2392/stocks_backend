@@ -31,7 +31,9 @@ def dividends_datetime_to_string(data):
 
 
 def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+    dividends_data = []
+    json_data = json.dumps(dividends_data)
+    return HttpResponse(json_data, content_type='application/json')
 
 
 def current_price_view(request, ticker):
