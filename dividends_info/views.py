@@ -32,22 +32,30 @@ def dividends_datetime_to_string(data):
 
 def main_dividends_results(request, ticker):
     yahoo_stock_obj = yfinance.Ticker(ticker.upper())
+    dividends_data = {}
 
     current_price = get_current_price(yahoo_stock_obj)
+    dividends_data['current_price'] = current_price
 
-    dividends_data = {
-        'current_price': current_price,
-    }
+    dividends = get_dividends(ticker)
+    today = datetime.date.today()
+    yield_changes = []
+    yield_years_back = [1, 3, 5, 10]
+    for years_back in yield_years_back:
+        change = get_dividend_change_over_years(dividends, years_back, today)
+        key = 'dividend_change_' + str(years_back) + '_year'
+        dividends_data[key] = change
+
     json_data = json.dumps(dividends_data)
     return HttpResponse(json_data, content_type='application/json')
 
 
-def current_price_view(request, ticker):
-    yahoo_stock_obj = yfinance.Ticker(ticker.upper())
-    current_price = get_current_price(yahoo_stock_obj)
-    current_price_object = {'current_price': current_price}
-    data = json.dumps(current_price_object)
-    return HttpResponse(data, content_type='application/json')
+# def current_price_view(request, ticker):
+#     yahoo_stock_obj = yfinance.Ticker(ticker.upper())
+#     current_price = get_current_price(yahoo_stock_obj)
+#     current_price_object = {'current_price': current_price}
+#     data = json.dumps(current_price_object)
+#     return HttpResponse(data, content_type='application/json')
 
 
 
