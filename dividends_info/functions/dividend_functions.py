@@ -102,3 +102,29 @@ def retrieve_dividends_going_back_n_years(dividends, years_back):
     dividends_over_certain_year_timespan = get_dividends_within_time_span(dividends, years_back_datetime, today)
     formatted_dividends_data = dividends_datetime_to_string(dividends_over_certain_year_timespan)
     return formatted_dividends_data
+
+
+#-------------------------------------------------------------------------------
+
+def gather_dividends_data(yahoo_obj):
+    dividends_data = {}
+    dividends = get_all_dividends(yahoo_obj)
+    today = datetime.date.today()
+
+    current_price = get_current_price(yahoo_obj)
+    dividends_data['current_price'] = current_price
+
+    yield_years_back = [1, 3, 5, 10]
+    changes_over_time = retrieve_dividend_change_over_time(dividends, yield_years_back)
+    dividends_data |= changes_over_time
+
+    current_yield = get_current_dividend_yield(current_price, dividends)
+    dividends_data['current_yield'] = current_yield
+
+    rate = get_yearly_dividend_rate_from_date(dividends, today)
+    dividends_data['recent_dividend_rate'] = rate
+
+    all_dividends_3_years_back = retrieve_dividends_going_back_n_years(dividends, 3)
+    dividends_data['all_dividends'] = all_dividends_3_years_back
+
+    return dividends_data
