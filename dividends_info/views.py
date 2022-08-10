@@ -14,9 +14,21 @@ from .functions.dividend_functions import gather_dividends_data
 #     dividends = get_all_dividends(yahoo_stock_obj)
 #     return dividends
 
+def get_keys_info(yahoo_stock_obj, keys):
+    info_object= yahoo_stock_obj.get_info()
+    keys_info_dict = {}
+    for key in keys:
+        keys_info_dict[key] = info_object[key]
+    return keys_info_dict
+
+
 def main_dividends_results(request, ticker):
     yahoo_stock_obj = yfinance.Ticker(ticker.upper())
-    json_data = json.dumps(gather_dividends_data(yahoo_stock_obj))
+    data = gather_dividends_data(yahoo_stock_obj)
+    addtional_keys = ['longBusinessSummary', 'longName']
+    additional_info = get_keys_info(yahoo_stock_obj, addtional_keys)
+    data |= additional_info
+    json_data = json.dumps(data)
     return HttpResponse(json_data, content_type='application/json')
 
 
