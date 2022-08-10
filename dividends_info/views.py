@@ -4,7 +4,7 @@ from django.core import serializers
 
 import datetime, json, yfinance
 
-from .functions import (
+from .functions.dividend_functions import (
     dividends_datetime_to_string,
     get_all_dividends,
     get_current_price,
