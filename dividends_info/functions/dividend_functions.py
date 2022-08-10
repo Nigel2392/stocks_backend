@@ -25,16 +25,16 @@ def get_all_dividends(yahoo_obj):
     return dividends_dicts
 
 
-def get_all_dividends_dicts(yahoo_obj):
-    panda_dividends_obj = yahoo_obj.dividends
-    dividends_dicts = []
-    for i, v in panda_dividends_obj.iteritems():
-        dividends_dicts.append({'date': i.to_pydatetime().date(), 'amount': v})
-    # final_dicts = []
-    # for dict in dividends_dicts:
-    #     final_dicts.append({'date': dict['date'].strftime("%m/%d/%Y"), 'amount': dict['amount']})
-    # print(final_dicts)
-    return dividends_dicts
+# def get_all_dividends_dicts(yahoo_obj):
+#     panda_dividends_obj = yahoo_obj.dividends
+#     dividends_dicts = []
+#     for i, v in panda_dividends_obj.iteritems():
+#         dividends_dicts.append({'date': i.to_pydatetime().date(), 'amount': v})
+#     # final_dicts = []
+#     # for dict in dividends_dicts:
+#     #     final_dicts.append({'date': dict['date'].strftime("%m/%d/%Y"), 'amount': dict['amount']})
+#     # print(final_dicts)
+#     return dividends_dicts
 
 
 # TESTED

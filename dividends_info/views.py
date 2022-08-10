@@ -10,7 +10,7 @@ from .functions.dividend_functions import (
     get_current_price,
     get_dividend_change_over_years,
     get_current_dividend_yield,
-    get_all_dividends_dicts,
+    # get_all_dividends_dicts,
     get_dividends_within_time_span,
     get_yearly_dividend_rate_from_date,
     retrieve_dividend_change_over_time,
