@@ -13,6 +13,7 @@ from .functions.dividend_functions import (
     get_all_dividends_dicts,
     get_dividends_within_time_span,
     get_yearly_dividend_rate_from_date,
+    retrieve_dividend_change_over_time,
 )
 
 # HOW TO RETURN JSON
@@ -22,15 +23,6 @@ from .functions.dividend_functions import (
 #     yahoo_stock_obj = yfinance.Ticker(ticker.upper())
 #     dividends = get_all_dividends(yahoo_stock_obj)
 #     return dividends
-
-def retrieve_dividend_change_over_time(dividends, years_back_list):
-    today = datetime.date.today()
-    yield_changes = {}
-    for years_back in years_back_list:
-        change = get_dividend_change_over_years(dividends, years_back, today)
-        key = 'dividend_change_' + str(years_back) + '_year'
-        yield_changes[key] = change
-    return yield_changes
 
 
 def main_dividends_results(request, ticker):

@@ -81,3 +81,13 @@ def get_current_dividend_yield(price, dividends):
     """ this doesnt need any dates because current assumes were checking the rate over this past year"""
     rate = get_yearly_dividend_rate_from_date(dividends, datetime.date.today())
     return round((rate / price) * 100, 2)
+
+
+def retrieve_dividend_change_over_time(dividends, years_back_list):
+    today = datetime.date.today()
+    yield_changes = {}
+    for years_back in years_back_list:
+        change = get_dividend_change_over_years(dividends, years_back, today)
+        key = 'dividend_change_' + str(years_back) + '_year'
+        yield_changes[key] = change
+    return yield_changes
