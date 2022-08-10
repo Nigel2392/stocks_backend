@@ -116,6 +116,7 @@ def gather_dividends_data(yahoo_obj):
 
     yield_years_back = [1, 3, 5, 10]
     changes_over_time = retrieve_dividend_change_over_time(dividends, yield_years_back)
+    # https://stackoverflow.com/questions/8930915/append-a-dictionary-to-a-dictionary
     dividends_data |= changes_over_time
 
     current_yield = get_current_dividend_yield(current_price, dividends)
