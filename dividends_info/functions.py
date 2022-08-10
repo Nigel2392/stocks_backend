@@ -1,6 +1,13 @@
 import datetime
 
 
+def dividends_datetime_to_string(data):
+    str_data = []
+    for dict in data:
+        str_data.append({'date': dict['date'].strftime("%m/%d/%Y"), 'amount': dict['amount']})
+    return str_data
+
+
 def get_current_price(yahoo_obj):
     info = yahoo_obj.get_info()
     try:
