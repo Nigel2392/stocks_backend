@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # 'django.contrib.staticfiles',
 
     'dividends_info.apps.DividendsInfoConfig',
+    'users.apps.UsersConfig',
 
     'corsheaders',
 ]
