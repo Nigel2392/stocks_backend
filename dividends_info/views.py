@@ -18,7 +18,10 @@ def get_keys_info(yahoo_stock_obj, keys):
     info_object= yahoo_stock_obj.get_info()
     keys_info_dict = {}
     for key_dict in keys:
-        keys_info_dict[key_dict['setter']] = info_object[key_dict['getter']]
+        try:
+            keys_info_dict[key_dict['setter']] = info_object[key_dict['getter']]
+        except:
+            print("Couldn't find that key in yahoo get_info() object")
     return keys_info_dict
 
 
