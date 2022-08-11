@@ -9,10 +9,6 @@ from .functions.dividend_functions import gather_dividends_data
 # HOW TO RETURN JSON
 # https://stackoverflow.com/questions/9262278/how-do-i-return-json-without-using-a-template-in-django
 
-# def get_dividends(ticker):
-#     yahoo_stock_obj = yfinance.Ticker(ticker.upper())
-#     dividends = get_all_dividends(yahoo_stock_obj)
-#     return dividends
 
 def get_keys_info(yahoo_stock_obj, keys):
     info_object= yahoo_stock_obj.get_info()

@@ -55,9 +55,9 @@ def get_yearly_dividend_rate_from_date(dividends, target_date):
     one_year_previous_datetime = target_date - datetime.timedelta(days=365)
     dividends_within_one_year_previous_of_target_date = get_dividends_within_time_span(dividends, one_year_previous_datetime, target_date)
     yearly_dividend_rate = 0
-    print("totaling dividends for the dividend rate:")
+    # print("totaling dividends for the dividend rate:")
     for dividend in dividends_within_one_year_previous_of_target_date:
-        print("date: {date}, amount: {amount}".format(date=dividend['date'], amount=dividend['amount']))
+        # print("date: {date}, amount: {amount}".format(date=dividend['date'], amount=dividend['amount']))
         yearly_dividend_rate += dividend['amount']
     return round(yearly_dividend_rate, 2)
 
@@ -72,11 +72,11 @@ def get_dividend_change_over_years(dividends, years, end_date):
     if not years_back_dividend_rate:
         return "there was no dividend back then"
 
-    print("recent dividend rate is %s" % recent_dividend_rate)
-    print("years_back_dividend_rate rate is %s" % years_back_dividend_rate)
+    # print("recent dividend rate is %s" % recent_dividend_rate)
+    # print("years_back_dividend_rate rate is %s" % years_back_dividend_rate)
 
     increase = round(((recent_dividend_rate - years_back_dividend_rate) / years_back_dividend_rate * 100 / years), 1)
-    print("{years} year increase is: {increase}%".format(years=years, increase=increase))
+    # print("{years} year increase is: {increase}%".format(years=years, increase=increase))
     return increase
 
 
@@ -129,6 +129,8 @@ def gather_dividends_data(yahoo_obj):
     dividends_data['recent_dividend_rate'] = rate
 
     all_dividends_3_years_back = retrieve_dividends_going_back_n_years(dividends, 3)
+    # give most recent dividends in the front for display on table
+    all_dividends_3_years_back.reverse()
     dividends_data['all_dividends'] = all_dividends_3_years_back
 
     return dividends_data
