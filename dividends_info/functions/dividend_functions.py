@@ -20,9 +20,12 @@ def get_current_price(yahoo_obj):
 def get_all_dividends(yahoo_obj):
     panda_dividends_obj = yahoo_obj.dividends
     dividends_dicts = []
-    for i, v in panda_dividends_obj.iteritems():
-        dividends_dicts.append({'date': i.to_pydatetime().date(), 'amount': v})
-    return dividends_dicts
+    try:
+        for i, v in panda_dividends_obj.iteritems():
+            dividends_dicts.append({'date': i.to_pydatetime().date(), 'amount': v})
+        return dividends_dicts
+    except:
+        return []
 
 
 # def get_all_dividends_dicts(yahoo_obj):
