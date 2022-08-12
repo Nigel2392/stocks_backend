@@ -1,3 +1,5 @@
 from django.shortcuts import render
 
-# Create your views here.
+from utils import get_db_handle
+
+# handle, db_client = 

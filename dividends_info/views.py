@@ -5,6 +5,7 @@ from django.core import serializers
 import datetime, json, yfinance
 
 from .functions.dividend_functions import gather_dividends_data
+# from utils import client, db
 
 # HOW TO RETURN JSON
 # https://stackoverflow.com/questions/9262278/how-do-i-return-json-without-using-a-template-in-django
