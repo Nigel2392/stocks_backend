@@ -12,3 +12,5 @@ class RecentSearch(models.Model):
 class UserProfile(models.Model):
     user_id = models.CharField(max_length=255)
     searches = models.ArrayField(model_container=RecentSearch)
+
+    objects = models.DjongoManager()
