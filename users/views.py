@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 import json
 
 from .models import UserProfile
 
-
+@csrf_exempt
 def get_user_profile(request, user_id):
     if request.method == 'GET':
         try:
@@ -32,7 +33,10 @@ def get_user_profile(request, user_id):
         json_data = json.dumps(data)
         return HttpResponse(json_data, content_type='application/json')
     if request.method == 'POST':
-        pass
+        data = request.POST
+        print(data)
+        # import ipdb; ipdb.set_trace()
+        return HttpResponse("it worked")
 
 
 # def update_user_profile(request, user_id):
