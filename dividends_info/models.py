@@ -4,7 +4,6 @@ from djongo import models
 
 
 class Dividend(models.Model):
-    ticker = models.CharField(max_length=100)
     date = models.CharField(max_length=40)
     amount = models.FloatField()
 
@@ -12,6 +11,7 @@ class Dividend(models.Model):
         abstract = True
 
 class StockInfo(models.Model):
+    ticker = models.CharField(max_length=100)
     name = models.CharField(max_length=255)
     description = models.TextField()
     sector = models.CharField(max_length=100)
