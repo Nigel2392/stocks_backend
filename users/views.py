@@ -33,9 +33,18 @@ def get_user_profile(request, user_id):
         json_data = json.dumps(data)
         return HttpResponse(json_data, content_type='application/json')
     if request.method == 'POST':
-        data = request.POST
-        print(data)
-        print(data.keys())
+        # data = request.POST
+        raw_data = request.body
+        """https://stackoverflow.com/questions/29780060/trying-to-parse-request-body-from-post-in-django"""
+        body_unicode = raw_data.decode('utf-8')
+        body = json.loads(body_unicode)
+        print(body)
+        searches = body['searches']
+        searches_objects = [{'search_term': x} for x in searches]
+        print(searches_objects)
+        user = UserProfile.objects.get(user_id=user_id)
+        user.searches = searches_objects
+        user.save()
         return HttpResponse("it worked")
 
 
