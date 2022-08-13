@@ -35,7 +35,7 @@ def get_user_profile(request, user_id):
     if request.method == 'POST':
         data = request.POST
         print(data)
-        # import ipdb; ipdb.set_trace()
+        print(data.keys())
         return HttpResponse("it worked")
 
 
