@@ -4,8 +4,8 @@ from django.core import serializers
 
 import datetime, json, yfinance
 
-from .functions.dividend_functions import gather_dividends_data
-# from utils import client, db
+from .functions.dividend_functions import gather_dividends_data_from_yahoo_obj
+from.models import StockInfo
 
 # HOW TO RETURN JSON
 # https://stackoverflow.com/questions/9262278/how-do-i-return-json-without-using-a-template-in-django
@@ -24,7 +24,7 @@ def get_keys_info(yahoo_stock_obj, keys):
 
 def main_dividends_results(request, ticker):
     yahoo_stock_obj = yfinance.Ticker(ticker.upper())
-    data = gather_dividends_data(yahoo_stock_obj)
+    data = gather_dividends_data_from_yahoo_obj(yahoo_stock_obj)
     addtional_keys = [
         {'setter': 'name', 'getter': 'longName'},
         {'setter': 'summary', 'getter': 'longBusinessSummary'},
@@ -32,6 +32,7 @@ def main_dividends_results(request, ticker):
     ]
     additional_info = get_keys_info(yahoo_stock_obj, addtional_keys)
     data |= additional_info
+    print(data)
     json_data = json.dumps(data)
     return HttpResponse(json_data, content_type='application/json')
 

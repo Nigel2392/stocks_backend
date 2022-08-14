@@ -28,18 +28,6 @@ def get_all_dividends(yahoo_obj):
         return []
 
 
-# def get_all_dividends_dicts(yahoo_obj):
-#     panda_dividends_obj = yahoo_obj.dividends
-#     dividends_dicts = []
-#     for i, v in panda_dividends_obj.iteritems():
-#         dividends_dicts.append({'date': i.to_pydatetime().date(), 'amount': v})
-#     # final_dicts = []
-#     # for dict in dividends_dicts:
-#     #     final_dicts.append({'date': dict['date'].strftime("%m/%d/%Y"), 'amount': dict['amount']})
-#     # print(final_dicts)
-#     return dividends_dicts
-
-
 # TESTED
 def get_dividends_within_time_span(dividends, start_date, end_date):
     """change to take a time span of start, end, 2 dates and grab dividends within those dates"""
@@ -109,7 +97,7 @@ def retrieve_dividends_going_back_n_years(dividends, years_back):
 
 #-------------------------------------------------------------------------------
 
-def gather_dividends_data(yahoo_obj):
+def gather_dividends_data_from_yahoo_obj(yahoo_obj):
     dividends_data = {}
     dividends = get_all_dividends(yahoo_obj)
     today = datetime.date.today()
