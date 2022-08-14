@@ -35,7 +35,6 @@ def get_user_profile(request, user_id):
         return HttpResponse({json_data}, content_type='application/json')
 
     if request.method == 'POST':
-        # data = request.POST
         raw_data = request.body
         """https://stackoverflow.com/questions/29780060/trying-to-parse-request-body-from-post-in-django"""
         body_unicode = raw_data.decode('utf-8')
@@ -43,32 +42,9 @@ def get_user_profile(request, user_id):
         print(body)
         searches = body['searches']
         searches_objects = [{'search_term': x} for x in searches]
+        print("New searches for user {user_id}".format(user_id=user_id))
         print(searches_objects)
         user = UserProfile.objects.get(user_id=user_id)
         user.searches = searches_objects
         user.save()
         return HttpResponse("it worked")
-
-
-# def update_user_profile(request, user_id):
-#     try:
-#         user = UserProfile.objects.get(user_id=user_id)
-#         print("user found")
-#     except:
-#         user = None
-#         profile = UserProfile()
-#         profile.user_id = user_id
-#         profile.searches = [
-#             {'search_term': 'hd'},
-#             {'search_term': 'wba'},
-#         ]
-#         profile.save()
-#         print("user saved in db")
-#         user = UserProfile.objects.get(user_id=user_id)
-#
-#     data = {
-#         'user_id': user.user_id,
-#         'searches': user.searches
-#     }
-#     json_data = json.dumps(data)
-#     return HttpResponse(json_data, content_type='application/json')
