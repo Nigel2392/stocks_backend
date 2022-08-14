@@ -81,7 +81,10 @@ def main_dividends_results(request, ticker):
         stock.current_price = data['current_price']
         stock.name = data['name']
         stock.summary = data['summary']
-        stock.sector = data['sector']
+        try:
+            stock.sector = data['sector']
+        except:
+            stock.sector = ''
         print("all dividends if stock didnt exist")
         print(all_dividends)
         # all_dividends_with_datestrings = dividends_datetime_to_string(all_dividends)
