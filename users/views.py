@@ -12,10 +12,8 @@ def get_user_profile(request, user_id):
         try:
             user = UserProfile.objects.get(user_id=user_id)
             print("user found")
-        except Exception as error:
-            print("User profile wasnt found:")
-            print(error)
-            user = None
+        except UserProfile.DoesNotExist:
+            print("user does not exist exception")
             profile = UserProfile()
             profile.user_id = user_id
             profile.searches = [
@@ -25,13 +23,17 @@ def get_user_profile(request, user_id):
             profile.save()
             print("user saved in db")
             user = UserProfile.objects.get(user_id=user_id)
+        except Exception as error:
+            print("got an unknown exception:")
+            print(error)
 
         data = {
             'user_id': user.user_id,
             'searches': user.searches
         }
         json_data = json.dumps(data)
-        return HttpResponse(json_data, content_type='application/json')
+        return HttpResponse({json_data}, content_type='application/json')
+
     if request.method == 'POST':
         # data = request.POST
         raw_data = request.body
