@@ -29,7 +29,7 @@ def get_keys_info(yahoo_stock_obj, keys):
     return keys_info_dict
 
 
-def main_dividends_results(request, ticker):
+def main_dividends_results(request, ticker, dividends_years_back):
 
     def get_recent_price_or_database_saved_price(ticker, stock):
         current_price = get_current_price_of_stock_darqube(ticker)
@@ -79,7 +79,7 @@ def main_dividends_results(request, ticker):
                             dividends=stock.dividends,
                             current_price=current_price,
                             yield_years_back=[1, 3, 5, 10],
-                            all_dividends_years_back=3
+                            all_dividends_years_back=dividends_years_back
                         )
         data |= dividends_data
         json_data = json.dumps(data)
@@ -94,7 +94,7 @@ def main_dividends_results(request, ticker):
                     dividends=all_dividends,
                     current_price=current_price,
                     yield_years_back=[1, 3, 5, 10],
-                    all_dividends_years_back=3
+                    all_dividends_years_back=dividends_years_back
                 )
         addtional_keys = [
             {'setter': 'name', 'getter': 'longName'},
