@@ -33,6 +33,16 @@ def get_keys_info(yahoo_stock_obj, keys):
 
 
 def main_dividends_results(request, ticker):
+
+    def get_recent_price_or_database_saved_price(ticker, stock):
+        current_price = get_current_price_of_stock_darqube(ticker)
+        if current_price:
+            stock.current_price = current_price
+            stock.save()
+        else:
+            current_price = stock.current_price
+        return current_price
+
     try:
         now = datetime.datetime.now()
         today = datetime.date.today()
@@ -53,23 +63,13 @@ def main_dividends_results(request, ticker):
             else:
                 print("stock hasn't been updated recently, make api call")
                 """ TODO: use websockets- https://api.darqube.com/#operation/quote_data_api_market_data_quote__ticker__get"""
-                current_price = get_current_price_of_stock_darqube(ticker)
-                if current_price:
-                    stock.current_price = current_price
-                    stock.save()
-                else:
-                    current_price = stock.current_price
+                current_price = get_recent_price_or_database_saved_price(ticker=ticker, stock=stock)
 
         except Exception as e:
             print("\n exception checking for last updated time: maybe the stock object didn't have a last updated time yet")
             print(e)
             """ TODO: remove duplicate code into an internal function """
-            current_price = get_current_price_of_stock_darqube(ticker)
-            if current_price:
-                stock.current_price = current_price
-                stock.save()
-            else:
-                current_price = stock.current_price
+            current_price = get_recent_price_or_database_saved_price(ticker=ticker, stock=stock)
 
         data = {}
 
