@@ -1,3 +1,5 @@
+import datetime
+
 from djongo import models
 
 
@@ -16,5 +18,10 @@ class StockInfo(models.Model):
     summary = models.TextField()
     sector = models.CharField(max_length=100)
     dividends = models.ArrayField(model_container=Dividend)
+    last_updated_time = models.DateTimeField(null=True)
 
     objects = models.DjongoManager()
+
+    def save(self, *args, **kwargs):
+        self.last_updated_time = datetime.datetime.now()
+        super(StockInfo, self).save(*args, **kwargs)

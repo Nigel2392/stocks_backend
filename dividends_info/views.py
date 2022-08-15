@@ -37,12 +37,21 @@ def main_dividends_results(request, ticker):
         today = datetime.date.today()
         stock = StockInfo.objects.get(ticker=ticker)
         print("found the stock")
-
+        try:
+            print("the last updated time for stock {ticker} before save: {time}".format(ticker=ticker, time=stock.last_updated_time.strftime("%m/%d/%Y %H:%M:%S")))
+        except:
+            print("the stock object didn't have a last updated time yet")
         data = {}
 
+        """ TODO: use websockets- https://api.darqube.com/#operation/quote_data_api_market_data_quote__ticker__get"""
         current_price = get_current_price_of_stock_darqube(ticker)
-        if not current_price:
+        if current_price:
+            stock.current_price = current_price
+            stock.save()
+        else:
             current_price = stock.current_price
+
+        print("the last updated time for stock {ticker} after save: {time}".format(ticker=ticker, time=stock.last_updated_time.strftime("%m/%d/%Y %H:%M:%S")))
 
         data['current_price'] = current_price
         data['name'] = stock.name

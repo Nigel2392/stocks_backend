@@ -8,6 +8,9 @@ DARQUBE_API_KEY = config('DARQUBE_API_KEY')
 # https://api.darqube.com/data-api/market_data/quote/TSLA?token=your_api_key
 
 def get_current_price_of_stock_darqube(ticker):
+    
+    """ TODO: use websockets- https://api.darqube.com/#operation/quote_data_api_market_data_quote__ticker__get"""
+
     CURRENT_PRICE_URL_END = "data-api/market_data/quote/" + ticker.upper()
     REQUEST_URL = BASE_DARQUBE_URL + CURRENT_PRICE_URL_END
     print("Request url for darqube current price lookup: {url}".format(url=REQUEST_URL))
