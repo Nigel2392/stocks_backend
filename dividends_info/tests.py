@@ -4,7 +4,7 @@ from django.test import TestCase
 
 from .data import DIVIDENDS_DATA_FOR_PSEC
 
-from .functions import (
+from .functions.dividend_functions import (
     get_dividends_within_time_span,
     get_yearly_dividend_rate_from_date,
     get_dividend_change_over_years,
@@ -20,6 +20,9 @@ DIVIDENDS_DATA = dividends_data_string_date_to_datetime(DIVIDENDS_DATA_FOR_PSEC)
 
 
 class DividendsFunctionsTests(TestCase):
+
+    # https://stackoverflow.com/questions/5917587/django-unit-tests-without-a-db
+    databases = []
 
     def test_get_dividends_within_time_span_1(self):
         actual_dividends = get_dividends_within_time_span(DIVIDENDS_DATA, datetime.datetime(2021, 7, 25), datetime.datetime(2022, 7, 25))
