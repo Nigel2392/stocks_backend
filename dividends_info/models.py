@@ -22,6 +22,7 @@ class StockInfo(models.Model):
 
     objects = models.DjongoManager()
 
+    # https://stackoverflow.com/questions/9953427/django-custom-save-model
     def save(self, *args, **kwargs):
-        self.last_updated_time = datetime.datetime.now()
+        self.last_updated_time = datetime.datetime.now().astimezone()
         super(StockInfo, self).save(*args, **kwargs)

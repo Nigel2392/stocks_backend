@@ -34,22 +34,44 @@ def get_keys_info(yahoo_stock_obj, keys):
 
 def main_dividends_results(request, ticker):
     try:
+        now = datetime.datetime.now()
         today = datetime.date.today()
         stock = StockInfo.objects.get(ticker=ticker)
         print("found the stock")
         try:
-            print("the last updated time for stock {ticker} before save: {time}".format(ticker=ticker, time=stock.last_updated_time.strftime("%m/%d/%Y %H:%M:%S")))
-        except:
-            print("the stock object didn't have a last updated time yet")
-        data = {}
+            """ check if the StockInfo was updated within the last 5 minutes, if so use the db saved current price """
+            print("the last updated time for stock {ticker} before save: {time}" \
+                  .format(ticker=ticker, time=stock.last_updated_time.strftime("%m/%d/%Y %H:%M:%S")))
 
-        """ TODO: use websockets- https://api.darqube.com/#operation/quote_data_api_market_data_quote__ticker__get"""
-        current_price = get_current_price_of_stock_darqube(ticker)
-        if current_price:
-            stock.current_price = current_price
-            stock.save()
-        else:
-            current_price = stock.current_price
+            # https://stackoverflow.com/questions/796008/cant-subtract-offset-naive-and-offset-aware-datetimes
+            the_timedelta = now - stock.last_updated_time.replace(tzinfo=None)
+            print(the_timedelta)
+            # https://stackoverflow.com/questions/12484003/what-is-the-best-way-to-check-if-time-is-within-a-certain-minute
+            if the_timedelta < datetime.timedelta(minutes=5):
+                 print("stock was updated within the last 5 minutes...no need to make an api call")
+                 current_price = stock.current_price
+            else:
+                print("stock hasn't been updated recently, make api call")
+                """ TODO: use websockets- https://api.darqube.com/#operation/quote_data_api_market_data_quote__ticker__get"""
+                current_price = get_current_price_of_stock_darqube(ticker)
+                if current_price:
+                    stock.current_price = current_price
+                    stock.save()
+                else:
+                    current_price = stock.current_price
+
+        except Exception as e:
+            print("\n exception checking for last updated time: maybe the stock object didn't have a last updated time yet")
+            print(e)
+            """ TODO: remove duplicate code into an internal function """
+            current_price = get_current_price_of_stock_darqube(ticker)
+            if current_price:
+                stock.current_price = current_price
+                stock.save()
+            else:
+                current_price = stock.current_price
+
+        data = {}
 
         print("the last updated time for stock {ticker} after save: {time}".format(ticker=ticker, time=stock.last_updated_time.strftime("%m/%d/%Y %H:%M:%S")))
 
@@ -102,7 +124,9 @@ def main_dividends_results(request, ticker):
         print(data)
         json_data = json.dumps(data)
         return HttpResponse(json_data, content_type='application/json')
-
+    except Exception as error:
+        print("\nunknown error in main dividends results")
+        print(error)
 
 # def dividends_over_last_certain_years(request, ticker, years_back):
 #     dividends = get_dividends(ticker)
