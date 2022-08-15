@@ -13,6 +13,7 @@ from .functions.dividend_functions import (
     get_yearly_dividend_rate_from_date,
     retrieve_dividends_going_back_n_years,
     gather_dividends_data_from_yahoo_obj,
+    gather_dividends_data_from_dividends_array,
 )
 from.models import StockInfo
 from .apis.api_calls import get_current_price_of_stock_darqube
@@ -71,31 +72,20 @@ def main_dividends_results(request, ticker):
             """ TODO: remove duplicate code into an internal function """
             current_price = get_recent_price_or_database_saved_price(ticker=ticker, stock=stock)
 
-        data = {}
-
         print("the last updated time for stock {ticker} after save: {time}".format(ticker=ticker, time=stock.last_updated_time.strftime("%m/%d/%Y %H:%M:%S")))
 
+        data = {}
         data['current_price'] = current_price
         data['name'] = stock.name
         data['summary'] = stock.summary
         data['sector'] = stock.sector
-
-        yield_years_back = [1, 3, 5, 10]
-        changes_over_time = retrieve_dividend_change_over_time(stock.dividends, yield_years_back)
-        # https://stackoverflow.com/questions/8930915/append-a-dictionary-to-a-dictionary
-        data |= changes_over_time
-
-        current_yield = get_current_dividend_yield(current_price, stock.dividends)
-        data['current_yield'] = current_yield
-
-        rate = get_yearly_dividend_rate_from_date(stock.dividends, today)
-        data['recent_dividend_rate'] = rate
-
-        all_dividends_3_years_back = retrieve_dividends_going_back_n_years(stock.dividends, 3)
-        # give most recent dividends in the front for display on table
-        all_dividends_3_years_back.reverse()
-        data['all_dividends'] = all_dividends_3_years_back
-
+        dividends_data = gather_dividends_data_from_dividends_array(
+                            dividends=stock.dividends,
+                            current_price=current_price,
+                            yield_years_back=[1, 3, 5, 10],
+                            all_dividends_years_back=3
+                        )
+        data |= dividends_data
         json_data = json.dumps(data)
         return HttpResponse(json_data, content_type='application/json')
 

@@ -122,3 +122,24 @@ def gather_dividends_data_from_yahoo_obj(yahoo_obj):
     dividends_data['all_dividends'] = all_dividends_3_years_back
 
     return dividends_data
+
+
+def gather_dividends_data_from_dividends_array(dividends, current_price, yield_years_back, all_dividends_years_back):
+    today = datetime.date.today()
+    data = {}
+
+    changes_over_time = retrieve_dividend_change_over_time(dividends, yield_years_back)
+    data |= changes_over_time
+
+    current_yield = get_current_dividend_yield(current_price, dividends)
+    data['current_yield'] = current_yield
+
+    rate = get_yearly_dividend_rate_from_date(dividends, today)
+    data['recent_dividend_rate'] = rate
+
+    all_dividends_n_years_back = retrieve_dividends_going_back_n_years(dividends, all_dividends_years_back)
+    # give most recent dividends in the front for display on table
+    all_dividends_n_years_back.reverse()
+    data['all_dividends'] = all_dividends_n_years_back
+
+    return data
