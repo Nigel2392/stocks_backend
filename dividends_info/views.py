@@ -6,6 +6,7 @@ import datetime, json, yfinance
 
 """ TODO: remove imported functions and write function to gather dividend data that works in both parts of the views"""
 from .functions.dividend_functions import (
+    get_current_price,
     dividends_datetime_to_string,
     get_all_dividends,
     retrieve_dividend_change_over_time,
@@ -57,7 +58,7 @@ def main_dividends_results(request, ticker):
             # https://stackoverflow.com/questions/796008/cant-subtract-offset-naive-and-offset-aware-datetimes
             the_timedelta = now - stock.last_updated_time.replace(tzinfo=None)
             print(the_timedelta)
-            # https://stackoverflow.com/questions/12484003/what-is-the-best-way-to-check-if-time-is-within-a-certain-minute
+            # https://stackoverflow.com/questions/73358271/check-if-model-was-recently-updated-fails-trying-to-use-timedelta/73360147#73360147
             if the_timedelta < datetime.timedelta(minutes=5):
                  print("stock was updated within the last 5 minutes...no need to make an api call")
                  current_price = stock.current_price
@@ -93,7 +94,13 @@ def main_dividends_results(request, ticker):
         print("stock didnt exist in db")
         yahoo_stock_obj = yfinance.Ticker(ticker.upper())
         all_dividends = get_all_dividends(yahoo_stock_obj)
-        data = gather_dividends_data_from_yahoo_obj(yahoo_stock_obj)
+        current_price = get_current_price(yahoo_stock_obj)
+        data = gather_dividends_data_from_dividends_array(
+                    dividends=all_dividends,
+                    current_price=current_price,
+                    yield_years_back=[1, 3, 5, 10],
+                    all_dividends_years_back=3
+                )
         addtional_keys = [
             {'setter': 'name', 'getter': 'longName'},
             {'setter': 'summary', 'getter': 'longBusinessSummary'},
@@ -101,6 +108,7 @@ def main_dividends_results(request, ticker):
         ]
         additional_info = get_keys_info(yahoo_stock_obj, addtional_keys)
         data |= additional_info
+        data['current_price'] = current_price
 
         stock = StockInfo()
         stock.ticker = ticker

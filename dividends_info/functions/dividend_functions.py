@@ -97,32 +97,6 @@ def retrieve_dividends_going_back_n_years(dividends, years_back):
 
 #-------------------------------------------------------------------------------
 
-def gather_dividends_data_from_yahoo_obj(yahoo_obj):
-    dividends_data = {}
-    dividends = get_all_dividends(yahoo_obj)
-    today = datetime.date.today()
-
-    current_price = get_current_price(yahoo_obj)
-    dividends_data['current_price'] = current_price
-
-    yield_years_back = [1, 3, 5, 10]
-    changes_over_time = retrieve_dividend_change_over_time(dividends, yield_years_back)
-    # https://stackoverflow.com/questions/8930915/append-a-dictionary-to-a-dictionary
-    dividends_data |= changes_over_time
-
-    current_yield = get_current_dividend_yield(current_price, dividends)
-    dividends_data['current_yield'] = current_yield
-
-    rate = get_yearly_dividend_rate_from_date(dividends, today)
-    dividends_data['recent_dividend_rate'] = rate
-
-    all_dividends_3_years_back = retrieve_dividends_going_back_n_years(dividends, 3)
-    # give most recent dividends in the front for display on table
-    all_dividends_3_years_back.reverse()
-    dividends_data['all_dividends'] = all_dividends_3_years_back
-
-    return dividends_data
-
 
 def gather_dividends_data_from_dividends_array(dividends, current_price, yield_years_back, all_dividends_years_back):
     today = datetime.date.today()
