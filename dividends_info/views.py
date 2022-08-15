@@ -7,13 +7,8 @@ import datetime, json, yfinance
 """ TODO: remove imported functions and write function to gather dividend data that works in both parts of the views"""
 from .functions.dividend_functions import (
     get_current_price,
-    dividends_datetime_to_string,
+    # dividends_datetime_to_string,
     get_all_dividends,
-    retrieve_dividend_change_over_time,
-    get_current_dividend_yield,
-    get_yearly_dividend_rate_from_date,
-    retrieve_dividends_going_back_n_years,
-    gather_dividends_data_from_yahoo_obj,
     gather_dividends_data_from_dividends_array,
 )
 from.models import StockInfo
