@@ -4,6 +4,7 @@ from django.core import serializers
 
 import datetime, json, yfinance
 
+""" TODO: remove imported functions and write function to gather dividend data that works in both parts of the views"""
 from .functions.dividend_functions import (
     dividends_datetime_to_string,
     get_all_dividends,
@@ -14,6 +15,7 @@ from .functions.dividend_functions import (
     gather_dividends_data_from_yahoo_obj,
 )
 from.models import StockInfo
+from .apis.api_calls import get_current_price_of_stock_darqube
 
 # HOW TO RETURN JSON
 # https://stackoverflow.com/questions/9262278/how-do-i-return-json-without-using-a-template-in-django
@@ -36,10 +38,13 @@ def main_dividends_results(request, ticker):
         stock = StockInfo.objects.get(ticker=ticker)
         print("found the stock")
 
-        print("all dividends if stock does exist")
-        print(stock.dividends)
         data = {}
-        data['current_price'] = stock.current_price
+
+        current_price = get_current_price_of_stock_darqube(ticker)
+        if not current_price:
+            current_price = stock.current_price
+
+        data['current_price'] = current_price
         data['name'] = stock.name
         data['summary'] = stock.summary
         data['sector'] = stock.sector
@@ -49,7 +54,7 @@ def main_dividends_results(request, ticker):
         # https://stackoverflow.com/questions/8930915/append-a-dictionary-to-a-dictionary
         data |= changes_over_time
 
-        current_yield = get_current_dividend_yield(stock.current_price, stock.dividends)
+        current_yield = get_current_dividend_yield(current_price, stock.dividends)
         data['current_yield'] = current_yield
 
         rate = get_yearly_dividend_rate_from_date(stock.dividends, today)
@@ -78,16 +83,10 @@ def main_dividends_results(request, ticker):
 
         stock = StockInfo()
         stock.ticker = ticker
-        stock.current_price = data['current_price']
-        stock.name = data['name']
-        stock.summary = data['summary']
-        try:
-            stock.sector = data['sector']
-        except:
-            stock.sector = ''
-        print("all dividends if stock didnt exist")
-        print(all_dividends)
-        # all_dividends_with_datestrings = dividends_datetime_to_string(all_dividends)
+        stock.current_price = data.get('current_price', 0)
+        stock.name = data.get('name', '')
+        stock.summary = data.get('summary', '')
+        stock.sector = data.get('sector', '')
         stock.dividends = all_dividends
         stock.save()
 
