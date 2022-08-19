@@ -22,6 +22,10 @@ def get_user_profile(request, user_id):
                 {'search_term': 'hd'},
                 {'search_term': 'wba'},
             ]
+            profile.display_settings = [
+                {'setting_name': 'showYieldChange', 'visible': True},
+                {'setting_name': 'showAllDividends', 'visible': True},
+            ]
             profile.save()
             print("user saved in db")
             user = UserProfile.objects.get(user_id=user_id)
@@ -31,7 +35,8 @@ def get_user_profile(request, user_id):
 
         data = {
             'user_id': user.user_id,
-            'searches': user.searches
+            'searches': user.searches,
+            'display_settings': user.display_settings
         }
         json_data = json.dumps(data)
         return HttpResponse({json_data}, content_type='application/json')
@@ -44,5 +49,6 @@ def get_user_profile(request, user_id):
         print(searches_objects)
         user = UserProfile.objects.get(user_id=user_id)
         user.searches = searches_objects
+        user.display_settings = body['display_settings']
         user.save()
         return HttpResponse("it worked")
