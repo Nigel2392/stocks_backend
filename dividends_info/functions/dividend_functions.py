@@ -14,11 +14,11 @@ def get_current_price(yahoo_obj):
     try:
         price = info['currentPrice']
     except KeyError:
-        price = info['navPrice']
-        # try:
-        #     price = info['navPrice']
-        # except:
-        #     price = get_current_price_of_stock_darqube(yahoo_obj.ticker)
+        # price = info['navPrice']
+        try:
+            price = info['navPrice']
+        except:
+            price = get_current_price_of_stock_darqube(yahoo_obj.ticker)
     return price
 
 
