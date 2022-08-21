@@ -26,28 +26,33 @@ def parse_earnings_history_date(datestring):
     return date
 
 def earnings_datetime_to_string(data):
-    str_data = []
+    final_data = []
     for dict in data:
-        str_data.append({
+        final_data.append({
             'date': dict['date'].strftime("%m/%d/%Y"),
             'expected': dict['expected'],
             'actual': dict['actual'],
             'surprise': dict['surprise']
         })
-    return str_data
+    return final_data
 
 def gather_earnings_objects(yahoo_obj):
     history = yahoo_obj.earnings_history
     row_count = 100
     earnings = []
     for i in range(row_count):
-        data = {}
-        parsed_date = parse_earnings_history_date(history.iloc[i][2])
-        data['date'] = parsed_date
-        data['expected'] = history.iloc[i][3]
-        data['actual'] = history.iloc[i][4]
-        data['surprise'] = history.iloc[i][5]
-        earnings.append(data)
+        try:
+            data = {}
+            parsed_date = parse_earnings_history_date(history.iloc[i][2])
+            data['date'] = parsed_date
+            data['expected'] = history.iloc[i][3]
+            data['actual'] = history.iloc[i][4]
+            data['surprise'] = history.iloc[i][5]
+            earnings.append(data)
+        except IndexError:
+            print("Less than 100 rows for this dataframe")
+        except:
+            print("Unknown error parsing earnings history dataframe")
     print(earnings)
     return earnings
 
@@ -105,12 +110,12 @@ def main_dividends_results(request, ticker, dividends_years_back):
         print("the last updated time for stock {ticker} after save: {time}".format(ticker=ticker, time=stock.last_updated_time.strftime("%m/%d/%Y %H:%M:%S")))
 
         # update stock record with earnings data if needed
-        # if not stock.earnings:
-        yahoo_stock_obj = yfinance.Ticker(ticker.upper())
-        print(yahoo_stock_obj)
-        earnings = gather_earnings_objects(yahoo_stock_obj)
-        stock.earnings = earnings
-        stock.save()
+        if not stock.earnings:
+            yahoo_stock_obj = yfinance.Ticker(ticker.upper())
+            print(yahoo_stock_obj)
+            earnings = gather_earnings_objects(yahoo_stock_obj)
+            stock.earnings = earnings
+            stock.save()
 
         data = {}
         data['current_price'] = current_price
@@ -126,7 +131,6 @@ def main_dividends_results(request, ticker, dividends_years_back):
         data |= dividends_data
         processed_earnings = earnings_datetime_to_string(stock.earnings)
         data['earnings'] = processed_earnings
-        print(data)
         json_data = json.dumps(data)
         return HttpResponse(json_data, content_type='application/json')
 
@@ -141,16 +145,18 @@ def main_dividends_results(request, ticker, dividends_years_back):
                     yield_years_back=[1, 3, 5, 10],
                     all_dividends_years_back=dividends_years_back
                 )
-        addtional_keys = [
+        additional_keys = [
             {'setter': 'name', 'getter': 'longName'},
             {'setter': 'summary', 'getter': 'longBusinessSummary'},
             {'setter': 'sector', 'getter': 'sector'},
         ]
-        additional_info = get_keys_info(yahoo_stock_obj, addtional_keys)
+        additional_info = get_keys_info(yahoo_stock_obj, additional_keys)
         data |= additional_info
         data['current_price'] = current_price
 
         earnings = gather_earnings_objects(yahoo_stock_obj)
+        processed_earnings = earnings_datetime_to_string(earnings)
+        data['earnings'] = processed_earnings
 
         stock = StockInfo()
         stock.ticker = ticker
@@ -162,7 +168,7 @@ def main_dividends_results(request, ticker, dividends_years_back):
         stock.earnings = earnings
         stock.save()
 
-        print(data)
+        print(data['all_dividends'])
         json_data = json.dumps(data)
         return HttpResponse(json_data, content_type='application/json')
     except Exception as error:

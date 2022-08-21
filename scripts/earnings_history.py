@@ -1,10 +1,10 @@
 import yfinance
 
-yahoo_stock_obj = yfinance.Ticker('HD'.upper())
+yahoo_stock_obj = yfinance.Ticker('PSEC'.upper())
 
-info = yahoo_stock_obj.get_info()
+# info = yahoo_stock_obj.get_info()
 
-# history = yahoo_stock_obj.earnings_history
+history = yahoo_stock_obj.earnings_history
 #
 # print(history)
 #
@@ -31,5 +31,7 @@ def gather_earnings_objects(yahoo_obj):
     print(earnings)
     return earnings
 
-gather_earnings_objects(yahoo_stock_obj)
-# import ipdb; ipdb.set_trace()
+# gather_earnings_objects(yahoo_stock_obj)
+
+
+import ipdb; ipdb.set_trace()

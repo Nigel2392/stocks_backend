@@ -1,4 +1,5 @@
 import datetime
+from dividends_info.apis.api_calls import get_current_price_of_stock_darqube
 
 
 def dividends_datetime_to_string(data):
@@ -14,6 +15,10 @@ def get_current_price(yahoo_obj):
         price = info['currentPrice']
     except KeyError:
         price = info['navPrice']
+        # try:
+        #     price = info['navPrice']
+        # except:
+        #     price = get_current_price_of_stock_darqube(yahoo_obj.ticker)
     return price
 
 
