@@ -17,7 +17,7 @@ class DisplaySetting(models.Model):
 
 
 class UserProfile(models.Model):
-    user_id = models.CharField(max_length=255)
+    user_id = models.CharField(max_length=255, unique=True)
     searches = models.ArrayField(model_container=RecentSearch, null=True)
     display_settings = models.ArrayField(model_container=DisplaySetting, null=True)
 
