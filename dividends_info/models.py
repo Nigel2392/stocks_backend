@@ -11,13 +11,24 @@ class Dividend(models.Model):
         abstract = True
 
 
+class Earning(models.Model):
+    date = models.DateTimeField()
+    expected = models.FloatField()
+    actual = models.FloatField()
+    surprise = models.CharField(max_length=10)
+
+    class Meta:
+        abstract = True
+
+
 class StockInfo(models.Model):
     ticker = models.CharField(max_length=100)
     current_price = models.FloatField()
     name = models.CharField(max_length=255)
-    summary = models.TextField()
-    sector = models.CharField(max_length=100)
-    dividends = models.ArrayField(model_container=Dividend)
+    summary = models.TextField(null=True)
+    sector = models.CharField(max_length=100, null=True)
+    dividends = models.ArrayField(model_container=Dividend, null=True)
+    earnings = models.ArrayField(model_container=Earning, null=True)
     last_updated_time = models.DateTimeField(null=True, auto_now=True)
 
     objects = models.DjongoManager()
