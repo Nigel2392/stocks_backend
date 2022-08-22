@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.core import serializers
 
+from djongo import transaction
+
 import datetime, json, re, yfinance
 
 """ TODO: remove imported functions and write function to gather dividend data that works in both parts of the views"""
@@ -82,7 +84,8 @@ def main_dividends_results(request, ticker, dividends_years_back):
     try:
         now = datetime.datetime.now()
         today = datetime.date.today()
-        stock = StockInfo.objects.get(ticker=ticker)
+        with transaction.atomic():
+            stock = StockInfo.objects.get_or_create(ticker=ticker)
         print("found the stock")
         try:
             """ check if the StockInfo was updated within the last 5 minutes, if so use the db saved current price """

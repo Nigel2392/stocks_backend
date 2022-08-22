@@ -7,7 +7,7 @@ import json
 from helpers.view_functions import parse_request_body
 from .models import UserProfile
 
-from django.db import transaction
+from djongo import transaction
 
 
 @csrf_exempt
