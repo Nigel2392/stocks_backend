@@ -13,22 +13,22 @@ from django.db import transaction
 @csrf_exempt
 def get_user_profile(request, user_id):
     if request.method == 'GET':
-         with transaction.atomic():
+        with transaction.atomic():
             profile, created = UserProfile.objects.get_or_create(user_id=user_id)
-         if created:
-             profile.user_id = user_id
-             profile.searches = [
+        if created:
+            profile.user_id = user_id
+            profile.searches = [
                 {'search_term': 'hd'},
                 {'search_term': 'wba'},
-             ]
-             profile.display_settings = [
+            ]
+            profile.display_settings = [
                 {'setting_name': 'showYieldChange', 'visible': True},
                 {'setting_name': 'showAllDividends', 'visible': True},
-             ]
-             profile.save()
-             print("user saved in db")
-         user = UserProfile.objects.get(user_id=user_id)
-        
+            ]
+            profile.save()
+            print("user saved in db")
+        user = UserProfile.objects.get(user_id=user_id)
+
 
         data = {
             'user_id': user.user_id,
