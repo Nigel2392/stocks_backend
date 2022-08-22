@@ -7,14 +7,15 @@ import json
 from helpers.view_functions import parse_request_body
 from .models import UserProfile
 
-from djongo import transaction
+# from djongo import transaction
 
 
 @csrf_exempt
 def get_user_profile(request, user_id):
+    pass
     if request.method == 'GET':
-        with transaction.atomic():
-            profile, created = UserProfile.objects.get_or_create(user_id=user_id)
+        # with transaction.atomic():
+        profile, created = UserProfile.objects.get_or_create(user_id=user_id)
         if created:
             profile.user_id = user_id
             profile.searches = [
@@ -27,13 +28,13 @@ def get_user_profile(request, user_id):
             ]
             profile.save()
             print("user saved in db")
-        user = UserProfile.objects.get(user_id=user_id)
+        # user = UserProfile.objects.get(user_id=user_id)
 
-
+    
         data = {
-            'user_id': user.user_id,
-            'searches': user.searches,
-            'display_settings': user.display_settings
+            'user_id': profile.user_id,
+            'searches': profile.searches,
+            'display_settings': profile.display_settings
         }
         json_data = json.dumps(data)
         return HttpResponse({json_data}, content_type='application/json')
