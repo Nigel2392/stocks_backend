@@ -6,6 +6,10 @@ from django.core import serializers
 
 import datetime, json, re, yfinance
 
+# For caching
+import hashlib
+
+
 """ TODO: remove imported functions and write function to gather dividend data that works in both parts of the views"""
 from .functions.dividend_functions import (
     get_current_price,
@@ -71,7 +75,7 @@ def get_keys_info(yahoo_stock_obj, keys):
 
 
 def main_dividends_results(request, ticker, dividends_years_back):
-
+    # VVV We can cache this VVV
     def get_recent_price_or_database_saved_price(ticker, stock):
         current_price = get_current_price_of_stock_darqube(ticker)
         if current_price:
@@ -86,7 +90,7 @@ def main_dividends_results(request, ticker, dividends_years_back):
         today = datetime.date.today()
         stock = StockInfo.objects.get(ticker=ticker)
         # with transaction.atomic():
-        #     stock = StockInfo.objects.get_or_create(ticker=ticker)
+        #     stock, created = StockInfo.objects.get_or_create(ticker=ticker)
         print("found the stock")
         try:
             """ check if the StockInfo was updated within the last 5 minutes, if so use the db saved current price """

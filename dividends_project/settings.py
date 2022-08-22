@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,8 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECRET_KEY = os.environ.get("SECRET_KEY")
 # DEBUG = int(os.environ.get("DEBUG", default=0))
 
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', cast=bool)
+from dividends_project.env_settings import *
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,6 +38,7 @@ ALLOWED_HOSTS = [
     '*digitalocean.app*',
 
 ]
+
 
 
 # Application definition
@@ -102,14 +101,6 @@ WSGI_APPLICATION = 'dividends_project.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-DATABASES = {
-   'default': {
-       'ENGINE': 'djongo',
-       'NAME': 'stocks',
-   }
-}
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

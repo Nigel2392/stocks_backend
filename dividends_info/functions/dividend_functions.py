@@ -1,7 +1,6 @@
 import datetime
 from dividends_info.apis.api_calls import get_current_price_of_stock_darqube
 
-
 def dividends_datetime_to_string(data):
     str_data = []
     for dict in data:
